@@ -21,7 +21,7 @@ from sat_utils import compute_mae_and_save_dsm_diff
 
 from eval_satnerf import find_best_embbeding_for_val_image, save_nerf_output_to_images, predefined_val_ts
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0, 1"
+#os.environ["CUDA_VISIBLE_DEVICES"] = "0, 1"
 
 class NeRF_pl(pl.LightningModule):
     """NeRF network"""
@@ -96,14 +96,14 @@ class NeRF_pl(pl.LightningModule):
     def train_dataloader(self):
         a = DataLoader(self.train_dataset[0],
                        shuffle=True,
-                       num_workers=4,
+                       num_workers=0,
                        batch_size=self.args.batch_size,
                        pin_memory=True)
         loaders = {"color": a}
         if self.depth:
             b = DataLoader(self.train_dataset[1],
                            shuffle=True,
-                           num_workers=4,
+                           num_workers=0,
                            batch_size=self.args.batch_size,
                            pin_memory=True)
             loaders["depth"] = b
@@ -112,7 +112,7 @@ class NeRF_pl(pl.LightningModule):
     def val_dataloader(self):
         return DataLoader(self.val_dataset[0],
                           shuffle=False,
-                          num_workers=4,
+                          num_workers=0,
                           batch_size=1,  # validate one image (H*W rays) at a time
                           pin_memory=True)
 

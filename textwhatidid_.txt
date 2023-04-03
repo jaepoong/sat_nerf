@@ -29,4 +29,4 @@ python3 create_satnerf_dsm.py Sat-NeRF $pretrained_models/JAX_068 out_dsm_path/J
 # for eval
 python3 eval_satnerf.py Sat-NeRF $pretrained_models/JAX_068 out_eval_path/JAX_068 28 val $pretrained_models/JAX_068 $dataset_dir/root_dir/crops_rpcs_ba_v2/JAX_068 $dataset_dir/DFC2019/Track3-RGB-crops/JAX_068 $dataset_dir/DFC2019/Track3-Truth
 # for training
-CUDA_VISIBLE_DEVICES=2 python3 main.py --model sat-nerf --exp_name JAX_068_ds1_sat-nerf --root_dir ./data/root_dir/crops_rpcs_ba_v2/JAX_068 --img_dir ./data/DFC2019/Track3-RGB-crops/JAX_068 --cache_dir ./cache_dir/crops_rpcs_ba_v2/JAX_068_ds1 --gt_dir ./data/DFC2019/Track3-Truth --logs_dir logs --ckpts_dir SatNeRF_output/ckpts --gpu_id 1
+CUDA_VISIBLE_DEVICES=2,3 python3 main.py --model sat-nerf --exp_name JAX_068_ds1_sat-nerf --root_dir ./data/root_dir/crops_rpcs_ba_v2/JAX_068 --img_dir ./data/DFC2019/Track3-RGB-crops/JAX_068 --cache_dir ./cache_dir/crops_rpcs_ba_v2/JAX_068_ds1 --gt_dir ./data/DFC2019/Track3-Truth --logs_dir logs --ckpts_dir SatNeRF_output/ckpts --gpu_id 1
