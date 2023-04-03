@@ -1,0 +1,32 @@
+--- 환경 설정용 신경쓰지 마십셔-------
+# docker
+docker run -it --name satnerf --gpus=all -v /home/poong/satnerf:/workspace tjfwownd/sat_nerf:tagname
+
+apt-get update
+apt-get install sudo
+
+# 콘다 환경 만들기
+conda create -n satnerf -c conda-forge python=3.6 libgdal
+source activate satnerf
+pip install --ignore-installed certifi -r requirements.txt ## 중간에 오류 나옴
+sudo apt-get install libtiff-dev ## 그때 설치
+pip install --ignore-installed certifi -r requirements.txt ## 다시 실행
+pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
+
+pip install gdal
+
+
+# docker
+docker login
+
+---여기부터 실행 코드 관련------
+
+# 실행코드
+export dataset_dir=data     # 데이터 경로  
+export pretrained_models=pretrained_models    # pretrained models 경로 만약 있을경우!
+# for nerf_test
+python3 create_satnerf_dsm.py Sat-NeRF $pretrained_models/JAX_068 out_dsm_path/JAX_068 28 $pretrained_models/JAX_068 $dataset_dir/root_dir/crops_rpcs_ba_v2/JAX_068 $dataset_dir/DFC2019/Track3-RGB-crops/JAX_068 $dataset_dir/DFC2019/Track3-Truth
+# for eval
+python3 eval_satnerf.py Sat-NeRF $pretrained_models/JAX_068 out_eval_path/JAX_068 28 val $pretrained_models/JAX_068 $dataset_dir/root_dir/crops_rpcs_ba_v2/JAX_068 $dataset_dir/DFC2019/Track3-RGB-crops/JAX_068 $dataset_dir/DFC2019/Track3-Truth
+# for training
+CUDA_VISIBLE_DEVICES=2 python3 main.py --model sat-nerf --exp_name JAX_068_ds1_sat-nerf --root_dir ./data/root_dir/crops_rpcs_ba_v2/JAX_068 --img_dir ./data/DFC2019/Track3-RGB-crops/JAX_068 --cache_dir ./cache_dir/crops_rpcs_ba_v2/JAX_068_ds1 --gt_dir ./data/DFC2019/Track3-Truth --logs_dir logs --ckpts_dir SatNeRF_output/ckpts --gpu_id 1
